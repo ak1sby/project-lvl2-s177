@@ -1,19 +1,31 @@
 // @flow
 
 import fs from 'fs';
+import path from 'path';
 import _ from 'lodash';
+import yaml from 'js-yaml';
 
-const fileToString = file => fs.readFileSync(file);
+const parseJson = data => JSON.parse(data);
+const parseYaml = data => yaml.safeLoad(data);
+
+const parsers = {
+  json: parseJson,
+  yaml: parseYaml,
+  yml: parseYaml,
+};
+
+const getObject = (file) => {
+  const fileToString = fs.readFileSync(file);
+  const extension = path.extname(file).slice(1);
+  return parsers[extension] ? parsers[extension](fileToString) : '';
+};
 
 const gendiff = (firstfile, secondfile) => {
-  const firstString = fileToString(firstfile);
-  const secondString = fileToString(secondfile);
-  const firstObject = JSON.parse(firstString);
-  const secondObject = JSON.parse(secondString);
+  const firstObject = getObject(firstfile);
+  const secondObject = getObject(secondfile);
   const firstFileKeys = Object.keys(firstObject);
   const secondFileKeys = Object.keys(secondObject);
-  const unitedKeys = [...firstFileKeys, ...secondFileKeys];
-  const uniqKeys = _.uniq(unitedKeys);
+  const uniqKeys = _.union(firstFileKeys, secondFileKeys);
   const resultArray = uniqKeys.reduce((acc, key) => {
     if (key in firstObject && key in secondObject) {
       if (firstObject[key] === secondObject[key]) {
