@@ -31,7 +31,8 @@
     "commander": "^2.12.2",
     "gulp": "*",
     "js-yaml": "^3.10.0",
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.4",
+    "ini": "*"
   },
   "devDependencies": {
     "babel-cli": "*",

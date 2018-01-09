@@ -4,18 +4,17 @@ import fs from 'fs';
 import path from 'path';
 import _ from 'lodash';
 import yaml from 'js-yaml';
-
-const parseJson = data => JSON.parse(data);
-const parseYaml = data => yaml.safeLoad(data);
+import ini from 'ini';
 
 const parsers = {
-  json: parseJson,
-  yaml: parseYaml,
-  yml: parseYaml,
+  json: JSON.parse,
+  yaml: yaml.safeLoad,
+  yml: yaml.safeLoad,
+  ini: ini.parse,
 };
 
 const getObject = (file) => {
-  const fileToString = fs.readFileSync(file);
+  const fileToString = fs.readFileSync(file, 'utf-8');
   const extension = path.extname(file).slice(1);
   return parsers[extension] ? parsers[extension](fileToString) : '';
 };
