@@ -25,7 +25,8 @@
   "author": "Alexander Grishkevich",
   "license": "ISC",
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "modulePathIgnorePatterns": ["<rootDir>/__tests__/Ignore"]
   },
   "dependencies": {
     "commander": "^2.12.2",

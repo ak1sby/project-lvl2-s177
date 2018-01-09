@@ -1,4 +1,5 @@
 import gendiff from '../src';
+import expected from './Ignore/expected';
 
 const firstJSONFile = './__tests__/__fixtures__/JSON/firstFile.json';
 const secondJSONFile = './__tests__/__fixtures__/JSON/secondFile.json';
@@ -9,15 +10,6 @@ const secondYAMLFile = './__tests__/__fixtures__/YML/secondFile.yaml';
 const firstINIFile = './__tests__/__fixtures__/INI/firstFile.ini';
 const secondINIFile = './__tests__/__fixtures__/INI/secondFile.ini';
 
-const expected = `{
-  host: hexlet.io
-+ timeout: 20
-- timeout: 50
-- proxy: 123.234.53.22
-+ verbose: true
-}`;
-
-export default expected;
 
 test('test, difference JSON files', () => {
   expect(gendiff(firstJSONFile, secondJSONFile)).toBe(expected);
