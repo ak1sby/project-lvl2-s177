@@ -59,6 +59,22 @@ const expectedRecursive = `{
     }
 }`;
 
+const expectedPlain = `{
+Property 'timeout' was updated. From  50 to 20
+Property 'proxy' was removed
+Property 'verbose' was added with value: true
+}`;
+
+const expectedRecursivePlain = `{
+Property 'common.setting2' was removed
+Property 'common.setting6.ops' was added with value: vops
+Property 'common.setting4' was added with value: blah blah
+Property 'common.setting5.key5' was added with value: value5
+Property 'group1.baz' was updated. From  bas to bars
+Property 'group2.abc' was removed
+Property 'group3.fee' was added with value: 100500
+}`;
+
 test('test, difference JSON files', () => {
   expect(gendiff(firstJSONFile, secondJSONFile)).toBe(expected);
 });
@@ -81,4 +97,12 @@ test('test, difference YML Recursive files', () => {
 
 test('test, difference INI Recursive files', () => {
   expect(gendiff(firstINIFileR, secondINIFileR)).toBe(expectedRecursive);
+});
+
+test('test, difference plain', () => {
+  expect(gendiff(firstJSONFile, secondJSONFile, 'plain')).toBe(expectedPlain);
+});
+
+test('test, difference Recursive plain', () => {
+  expect(gendiff(firstINIFileR, secondINIFileR, 'plain')).toBe(expectedRecursivePlain);
 });
