@@ -6,11 +6,11 @@ const plainRender = (data, parent = '') => {
   const objectToString = (obj) => {
     const result = Object.keys(obj).map(key =>
       [_.isObject(obj[key]) ?
-        objectToString(obj[key]) : `${obj[key]}`]);
-    return [...result];
+        objectToString(obj[key]) : `${obj[key]}`].join(''));
+    return ([...result]).join('');
   };
 
-  const getValue = value => [_.isObject(value) ? `${objectToString(value)}` : `${value}`];
+  const getValue = value => [_.isObject(value) ? `${objectToString(value)}` : `${value}`].join('');
 
   const selectFn = {
     nested: node => [`${plainRender(node.value, `${parent}${node.name}.`)}`],

@@ -25,37 +25,37 @@ const types = [
     type: 'nested',
     check: (first, second, key) => (first[key] instanceof Object && second[key] instanceof Object)
       && !(first[key] instanceof Array && second[key] instanceof Array),
-    getValue: (first, second, fun) => fun(first, second),
+    process: (first, second, fun) => fun(first, second),
   },
   {
     type: 'original',
     check: (first, second, key) => (_.has(first, key) && _.has(second, key)
       && (first[key] === second[key])),
-    getValue: first => _.identity(first),
+    process: first => _.identity(first),
   },
   {
     type: 'updated',
     check: (first, second, key) => (_.has(first, key) && _.has(second, key)
       && (first[key] !== second[key])),
-    getValue: (first, second) => ({ old: first, new: second }),
+    process: (first, second) => ({ old: first, new: second }),
   },
   {
     type: 'added',
     check: (first, second, key) => (!_.has(first, key) && _.has(second, key)),
-    getValue: (first, second) => _.identity(second),
+    process: (first, second) => _.identity(second),
   },
   {
     type: 'removed',
     check: (first, second, key) => (_.has(first, key) && !_.has(second, key)),
-    getValue: first => _.identity(first),
+    process: first => _.identity(first),
   },
 ];
 
 const getAst = (firstObj = {}, secondObj = {}) => {
   const uniqKeys = _.union(Object.keys(firstObj), Object.keys(secondObj));
   return uniqKeys.map((key) => {
-    const { type, getValue } = _.find(types, item => item.check(firstObj, secondObj, key));
-    const value = getValue(firstObj[key], secondObj[key], getAst);
+    const { type, process } = _.find(types, item => item.check(firstObj, secondObj, key));
+    const value = process(firstObj[key], secondObj[key], getAst);
     return { name: key, type, value };
   });
 };
