@@ -13,7 +13,7 @@ const plainRender = (data, parent = '') => {
   const getValue = value => (_.isObject(value) ? `${objectToString(value)}` : `${value}`);
 
   const selectFn = {
-    nested: node => [`${plainRender(node.value, `${parent}${node.name}.`)}`],
+    nested: node => [`${plainRender(node.children, `${parent}${node.name}.`)}`],
     original: () => '',
     updated: node => [`Property '${paretnPath}${node.name}' was updated. From '${getValue(node.value.old)}' to '${getValue(node.value.new)}'`],
     added: node => [`Property '${paretnPath}${node.name}' was added with ${_.isObject(node.value) ?

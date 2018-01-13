@@ -25,38 +25,50 @@ const types = [
     type: 'nested',
     check: (first, second, key) => (first[key] instanceof Object && second[key] instanceof Object)
       && !(first[key] instanceof Array && second[key] instanceof Array),
-    process: (first, second, fun) => fun(first, second),
+    getChildren: (first, second, fun) => fun(first, second),
+    getValue: () => null,
   },
   {
     type: 'original',
     check: (first, second, key) => (_.has(first, key) && _.has(second, key)
       && (first[key] === second[key])),
-    process: first => _.identity(first),
+    getChildren: () => null,
+    getValue: first => _.identity(first),
   },
   {
     type: 'updated',
     check: (first, second, key) => (_.has(first, key) && _.has(second, key)
       && (first[key] !== second[key])),
-    process: (first, second) => ({ old: first, new: second }),
+    getChildren: () => null,
+    getValue: (first, second) => ({ old: first, new: second }),
   },
   {
     type: 'added',
     check: (first, second, key) => (!_.has(first, key) && _.has(second, key)),
-    process: (first, second) => _.identity(second),
+    getChildren: () => null,
+    getValue: (first, second) => _.identity(second),
   },
   {
     type: 'removed',
     check: (first, second, key) => (_.has(first, key) && !_.has(second, key)),
-    process: first => _.identity(first),
+    getChildren: () => null,
+    getValue: first => _.identity(first),
   },
 ];
 
 const getAst = (firstObj = {}, secondObj = {}) => {
   const uniqKeys = _.union(Object.keys(firstObj), Object.keys(secondObj));
   return uniqKeys.map((key) => {
-    const { type, process } = _.find(types, item => item.check(firstObj, secondObj, key));
-    const value = process(firstObj[key], secondObj[key], getAst);
-    return { name: key, type, value };
+    const { type, getValue, getChildren } = _.find(types, item =>
+      item.check(firstObj, secondObj, key));
+    const value = getValue(firstObj[key], secondObj[key]);
+    const children = getChildren(firstObj[key], secondObj[key], getAst);
+    return {
+      name: key,
+      type,
+      value,
+      children,
+    };
   });
 };
 

@@ -20,7 +20,7 @@ const defaultRender = (data, curentIndent = setIndent) => {
   const genString = (name, value, prefix = '  ') => (`${indent}${prefix}${name}: ${getValue(value)}`);
 
   const selectFn = {
-    nested: node => genString(node.name, defaultRender(node.value, curentIndent + setIndent)),
+    nested: node => genString(node.name, defaultRender(node.children, curentIndent + setIndent)),
     original: node => genString(node.name, node.value),
     updated: node => [genString(node.name, node.value.new, '+ '), genString(node.name, node.value.old, '- ')].join('\n'),
     added: node => genString(node.name, node.value, '+ '),
