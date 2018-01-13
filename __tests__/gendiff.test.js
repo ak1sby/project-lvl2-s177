@@ -1,11 +1,13 @@
-import fs from 'fs';
+// import fs from 'fs';
 import gendiff from '../src';
 
 const basePath = '__tests__/__fixtures__/';
+/*
 const expected = fs.readFileSync(`${basePath}expected.txt`, 'utf8');
 const expectedRecursive = fs.readFileSync(`${basePath}expectedRecursive.txt`, 'utf8');
 const expectedPlain = fs.readFileSync(`${basePath}expectedPlain.txt`, 'utf8');
 const expectedRecursivePlain = fs.readFileSync(`${basePath}expectedRecursivePlain.txt`, 'utf8');
+*/
 
 const firstJSONFile = `${basePath}JSON/firstFile.json`;
 const secondJSONFile = `${basePath}JSON/secondFile.json`;
@@ -26,7 +28,7 @@ const firstINIFileR = `${basePath}INI/firstFileRecursive.ini`;
 const secondINIFileR = `${basePath}INI/secondFileRecursive.ini`;
 
 
-/* const expected = `
+const expected = `
 {
     host: hexlet.io
   + timeout: 20
@@ -66,21 +68,21 @@ const expectedRecursive = `
 `;
 
 const expectedPlain = `
-Property 'timeout' was updated. From  50 to 20
+Property 'timeout' was updated. From '50' to '20'
 Property 'proxy' was removed
-Property 'verbose' was added with value: true
+Property 'verbose' was added with value: 'true'
 `;
 
 const expectedRecursivePlain = `
 Property 'common.setting2' was removed
-Property 'common.setting6.ops' was added with value: vops
-Property 'common.setting4' was added with value: blah blah
-Property 'common.setting5' was added with value: value5
-Property 'group1.baz' was updated. From  bas to bars
+Property 'common.setting6.ops' was added with value: 'vops'
+Property 'common.setting4' was added with value: 'blah blah'
+Property 'common.setting5' was added with complex value
+Property 'group1.baz' was updated. From 'bas' to 'bars'
 Property 'group2' was removed
-Property 'group3' was added with value: 100500
+Property 'group3' was added with complex value
 `;
-*/
+
 
 test('test, difference JSON files', () => {
   expect(gendiff(firstJSONFile, secondJSONFile)).toBe(expected);
@@ -95,15 +97,15 @@ test('test, difference INI files', () => {
 });
 
 test('test, difference JSON Recursive files', () => {
-  expect(gendiff(firstJSONFileR, secondJSONFileR)).toEqual(expectedRecursive);
+  expect(gendiff(firstJSONFileR, secondJSONFileR)).toBe(expectedRecursive);
 });
 
 test('test, difference YML Recursive files', () => {
-  expect(gendiff(firstYMLFileR, secondYAMLFileR)).toEqual(expectedRecursive);
+  expect(gendiff(firstYMLFileR, secondYAMLFileR)).toBe(expectedRecursive);
 });
 
 test('test, difference INI Recursive files', () => {
-  expect(gendiff(firstINIFileR, secondINIFileR)).toEqual(expectedRecursive);
+  expect(gendiff(firstINIFileR, secondINIFileR)).toBe(expectedRecursive);
 });
 
 test('test, difference plain', () => {

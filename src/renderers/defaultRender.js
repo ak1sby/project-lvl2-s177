@@ -9,15 +9,15 @@ const defaultRender = (data, curentIndent = setIndent) => {
   const constIndent = convertToSpaces(setIndent);
 
   const objectToString = (obj) => {
-    const result = Object.keys(obj).map(key =>
-      [`${constIndent}${indent}${prefixSpace}${key}: `,
-        _.isObject(obj[key]) ?
-          objectToString(obj[key]) : `${obj[key]}`].join(''));
+    const result = Object.keys(obj)
+      .map(key =>
+        `${constIndent}${indent}${prefixSpace}${key}: ${_.isObject(obj[key]) ? objectToString(obj[key]) : obj[key]}`);
     return (['{', ...result, `${convertToSpaces(curentIndent)}}`]).join('\n');
   };
-  const getValue = value => [_.isObject(value) ? `${objectToString(value)}` : `${value}`].join('');
 
-  const genString = (name, value, prefix = '  ') => [`${indent}${prefix}${name}: ${getValue(value)}`].join('\n');
+  const getValue = value => (_.isObject(value) ? `${objectToString(value)}` : `${value}`);
+
+  const genString = (name, value, prefix = '  ') => (`${indent}${prefix}${name}: ${getValue(value)}`);
 
   const selectFn = {
     nested: node => genString(node.name, defaultRender(node.value, curentIndent + setIndent)),

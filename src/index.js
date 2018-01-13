@@ -63,7 +63,6 @@ const getAst = (firstObj = {}, secondObj = {}) => {
 const gendiff = (firstfile, secondfile, type = 'default') => {
   const firstObject = getObject(firstfile);
   const secondObject = getObject(secondfile);
-  // console.log(JSON.stringify(genDiffParse(firstObject, secondObject), null, '  '));
   const render = getRender(type);
   const result = render(getAst(firstObject, secondObject));
   return `\n${result}\n`;
