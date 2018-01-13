@@ -1,11 +1,11 @@
 // @flow
 
 import fs from 'fs';
+import _ from 'lodash';
 import path from 'path';
 import yaml from 'js-yaml';
 import ini from 'ini';
 import getRender from './renderers';
-import genDiffParse from './parse';
 
 const parsers = {
   json: JSON.parse,
@@ -20,13 +20,53 @@ const getObject = (file) => {
   return parsers[extension] ? parsers[extension](fileToString) : '';
 };
 
+const types = [
+  {
+    type: 'nested',
+    check: (first, second, key) => (first[key] instanceof Object && second[key] instanceof Object)
+      && !(first[key] instanceof Array && second[key] instanceof Array),
+    getValue: (first, second, fun) => fun(first, second),
+  },
+  {
+    type: 'original',
+    check: (first, second, key) => (_.has(first, key) && _.has(second, key)
+      && (first[key] === second[key])),
+    getValue: first => _.identity(first),
+  },
+  {
+    type: 'updated',
+    check: (first, second, key) => (_.has(first, key) && _.has(second, key)
+      && (first[key] !== second[key])),
+    getValue: (first, second) => ({ old: first, new: second }),
+  },
+  {
+    type: 'added',
+    check: (first, second, key) => (!_.has(first, key) && _.has(second, key)),
+    getValue: (first, second) => _.identity(second),
+  },
+  {
+    type: 'removed',
+    check: (first, second, key) => (_.has(first, key) && !_.has(second, key)),
+    getValue: first => _.identity(first),
+  },
+];
+
+const getAst = (firstObj = {}, secondObj = {}) => {
+  const uniqKeys = _.union(Object.keys(firstObj), Object.keys(secondObj));
+  return uniqKeys.map((key) => {
+    const { type, getValue } = _.find(types, item => item.check(firstObj, secondObj, key));
+    const value = getValue(firstObj[key], secondObj[key], getAst);
+    return { name: key, type, value };
+  });
+};
+
 const gendiff = (firstfile, secondfile, type = 'default') => {
   const firstObject = getObject(firstfile);
   const secondObject = getObject(secondfile);
   // console.log(JSON.stringify(genDiffParse(firstObject, secondObject), null, '  '));
   const render = getRender(type);
-  const result = render(genDiffParse(firstObject, secondObject));
-  return result;
+  const result = render(getAst(firstObject, secondObject));
+  return `\n${result}\n`;
 };
 
 export default gendiff;

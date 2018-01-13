@@ -1,0 +1,127 @@
+● test, difference INI Recursive files
+
+    Error
+
+       98 |
+       99 | test('test, difference INI Recursive files', () => {
+    > 100 |   expect(gendiff(firstINIFileR, secondINIFileR)).toEqual(expectedRecursive);
+      101 | });
+      102 |
+      103 | test('test, difference plain', () => {
+      Error: expect(received).toEqual(expected)
+
+      Expected value to equal:
+        "{
+          common: {
+              setting1: Value 1
+            - setting2: 200
+              setting3: true
+              setting6: {
+                  key: value
+                + ops: vops
+              }
+            + setting4: blah blah
+            + setting5: {
+                  key5: value5
+              }
+          }
+          group1: {
+            + baz: bars
+            - baz: bas
+              foo: bar
+          }
+        - group2: {
+              abc: 12345
+          }
+        + group3: {
+              fee: 100500
+          }
+      }
+      "
+      Received:
+        "{
+          common: {
+              setting1: Value 1
+            - setting2: 200
+              setting3: true
+              setting6: {
+                  key: value
+                + ops: vops
+              }
+            + setting4: blah blah
+            + setting5: {
+                  key5: value5
+              }
+          }
+          group1: {
+            + baz: bars
+            - baz: bas
+              foo: bar
+          }
+        - group2: {
+              abc: 12345
+          }
+        + group3: {
+              fee: 100500
+          }
+      }"
+
+      Difference:
+
+      - Expected
+      + Received
+
+      - {
+      -     common: {
+      -         setting1: Value 1
+      -       - setting2: 200
+      -         setting3: true
+      -         setting6: {
+      -             key: value
+      -           + ops: vops
+      -         }
+      -       + setting4: blah blah
+      -       + setting5: {
+      -             key5: value5
+      -         }
+      -     }
+      -     group1: {
+      -       + baz: bars
+      -       - baz: bas
+      -         foo: bar
+      -     }
+      -   - group2: {
+      -         abc: 12345
+      -     }
+      -   + group3: {
+      -         fee: 100500
+      -     }
+      - }
+      -
+      + {
+      +     common: {
+      +         setting1: Value 1
+      +       - setting2: 200
+      +         setting3: true
+      +         setting6: {
+      +             key: value
+      +           + ops: vops
+      +         }
+      +       + setting4: blah blah
+      +       + setting5: {
+      +             key5: value5
+      +         }
+      +     }
+      +     group1: {
+      +       + baz: bars
+      +       - baz: bas
+      +         foo: bar
+      +     }
+      +   - group2: {
+      +         abc: 12345
+      +     }
+      +   + group3: {
+      +         fee: 100500
+      +     }
+      + }
+      at Object.<anonymous> (__tests__/gendiff.test.js:100:61)

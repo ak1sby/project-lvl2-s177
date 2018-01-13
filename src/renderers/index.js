@@ -8,6 +8,6 @@ export default (type) => {
     case 'plain':
       return plainRender;
     default:
-      return defaultRender;
+      throw new Error(`${type} format isn\`t supported!`);
   }
 };

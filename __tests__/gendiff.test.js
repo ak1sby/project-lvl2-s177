@@ -1,9 +1,11 @@
-// import fs from 'fs';
+import fs from 'fs';
 import gendiff from '../src';
 
 const basePath = '__tests__/__fixtures__/';
-// const expected = fs.readFileSync(`${basePath}expected`, 'utf8');
-// const expectedRecursive = fs.readFileSync(`${basePath}expectedRecursive`, 'utf8');
+const expected = fs.readFileSync(`${basePath}expected.txt`, 'utf8');
+const expectedRecursive = fs.readFileSync(`${basePath}expectedRecursive.txt`, 'utf8');
+const expectedPlain = fs.readFileSync(`${basePath}expectedPlain.txt`, 'utf8');
+const expectedRecursivePlain = fs.readFileSync(`${basePath}expectedRecursivePlain.txt`, 'utf8');
 
 const firstJSONFile = `${basePath}JSON/firstFile.json`;
 const secondJSONFile = `${basePath}JSON/secondFile.json`;
@@ -24,15 +26,18 @@ const firstINIFileR = `${basePath}INI/firstFileRecursive.ini`;
 const secondINIFileR = `${basePath}INI/secondFileRecursive.ini`;
 
 
-const expected = `{
+/* const expected = `
+{
     host: hexlet.io
   + timeout: 20
   - timeout: 50
   - proxy: 123.234.53.22
   + verbose: true
-}`;
+}
+`;
 
-const expectedRecursive = `{
+const expectedRecursive = `
+{
     common: {
         setting1: Value 1
       - setting2: 200
@@ -43,7 +48,7 @@ const expectedRecursive = `{
         }
       + setting4: blah blah
       + setting5: {
-          + key5: value5
+            key5: value5
         }
     }
     group1: {
@@ -52,28 +57,30 @@ const expectedRecursive = `{
         foo: bar
     }
   - group2: {
-      - abc: 12345
+        abc: 12345
     }
   + group3: {
-      + fee: 100500
+        fee: 100500
     }
-}`;
+}
+`;
 
-const expectedPlain = `{
+const expectedPlain = `
 Property 'timeout' was updated. From  50 to 20
 Property 'proxy' was removed
 Property 'verbose' was added with value: true
-}`;
+`;
 
-const expectedRecursivePlain = `{
+const expectedRecursivePlain = `
 Property 'common.setting2' was removed
 Property 'common.setting6.ops' was added with value: vops
 Property 'common.setting4' was added with value: blah blah
-Property 'common.setting5.key5' was added with value: value5
+Property 'common.setting5' was added with value: value5
 Property 'group1.baz' was updated. From  bas to bars
-Property 'group2.abc' was removed
-Property 'group3.fee' was added with value: 100500
-}`;
+Property 'group2' was removed
+Property 'group3' was added with value: 100500
+`;
+*/
 
 test('test, difference JSON files', () => {
   expect(gendiff(firstJSONFile, secondJSONFile)).toBe(expected);
@@ -88,15 +95,15 @@ test('test, difference INI files', () => {
 });
 
 test('test, difference JSON Recursive files', () => {
-  expect(gendiff(firstJSONFileR, secondJSONFileR)).toBe(expectedRecursive);
+  expect(gendiff(firstJSONFileR, secondJSONFileR)).toEqual(expectedRecursive);
 });
 
 test('test, difference YML Recursive files', () => {
-  expect(gendiff(firstYMLFileR, secondYAMLFileR)).toBe(expectedRecursive);
+  expect(gendiff(firstYMLFileR, secondYAMLFileR)).toEqual(expectedRecursive);
 });
 
 test('test, difference INI Recursive files', () => {
-  expect(gendiff(firstINIFileR, secondINIFileR)).toBe(expectedRecursive);
+  expect(gendiff(firstINIFileR, secondINIFileR)).toEqual(expectedRecursive);
 });
 
 test('test, difference plain', () => {

@@ -1,38 +1,28 @@
-const getOperation = (obj) => {
-  switch (obj.operation) {
-    case 'added':
-      return 'added';
-    case 'removed':
-      return 'removed';
-    case 'updated':
-      return 'updated';
-    default:
-      return '  ';
-  }
-};
+import _ from 'lodash';
 
 const plainRender = (data, parent = '') => {
-  const resultArray = data.reduce((acc, obj) => {
-    const key = obj.name ? obj.name : '';
-    const paretnPath = parent.slice(0, parent.length);
-    const operation = getOperation(obj);
-    if (obj.type === 'complex value') {
-      return [...acc, `${plainRender(obj.children, `${parent}${obj.name}.`)}`];
-    }
-    if (obj.operation === 'updated') {
-      return [...acc, `Property '${paretnPath}${key}' was ${operation}. From  ${obj.old} to ${obj.new}`];
-    }
-    if (obj.operation === 'added') {
-      return [...acc, `Property '${paretnPath}${key}' was ${operation} with value: ${obj.value}`];
-    }
-    if (obj.operation === 'removed') {
-      return [...acc, `Property '${paretnPath}${key}' was ${operation}`];
-    }
-    return [...acc];
-  }, []);
-  return `${resultArray.join('\n')}`;
+  const paretnPath = parent.slice(0, parent.length);
+
+  const objectToString = (obj) => {
+    const result = Object.keys(obj).map(key =>
+      [_.isObject(obj[key]) ?
+        objectToString(obj[key]) : `${obj[key]}`]);
+    return [...result];
+  };
+
+  const getValue = value => [_.isObject(value) ? `${objectToString(value)}` : `${value}`];
+
+  const selectFn = {
+    nested: node => [`${plainRender(node.value, `${parent}${node.name}.`)}`],
+    original: () => '',
+    updated: node => [`Property '${paretnPath}${node.name}' was updated. From  ${getValue(node.value.old)} to ${getValue(node.value.new)}`],
+    added: node => [`Property '${paretnPath}${node.name}' was added with value: ${getValue(node.value)}`],
+    removed: node => [`Property '${paretnPath}${node.name}' was removed`],
+  };
+
+  const result = data.map(node => selectFn[node.type](node));
+  const resultArray = _.compact(result);
+  return [...resultArray].join('\n');
 };
 
-const finalplainRender = data => `{\n${plainRender(data, '')}\n}`;
-
-export default finalplainRender;
+export default plainRender;
