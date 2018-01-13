@@ -6,8 +6,8 @@ const plainRender = (data, parent = '') => {
   const objectToString = (obj) => {
     const result = Object.keys(obj).map(key =>
       [_.isObject(obj[key]) ?
-        objectToString(obj[key]) : `${obj[key]}`].join(''));
-    return ([...result]).join('');
+        objectToString(obj[key]) : 'complex value'].join(''));
+    return [...result];
   };
 
   const getValue = value => [_.isObject(value) ? `${objectToString(value)}` : `${value}`].join('');
