@@ -1,13 +1,14 @@
-// import fs from 'fs';
+
+import fs from 'fs';
 import gendiff from '../src';
 
+
 const basePath = '__tests__/__fixtures__/';
-/*
 const expected = fs.readFileSync(`${basePath}expected.txt`, 'utf8');
 const expectedRecursive = fs.readFileSync(`${basePath}expectedRecursive.txt`, 'utf8');
 const expectedPlain = fs.readFileSync(`${basePath}expectedPlain.txt`, 'utf8');
 const expectedRecursivePlain = fs.readFileSync(`${basePath}expectedRecursivePlain.txt`, 'utf8');
-*/
+
 
 const firstJSONFile = `${basePath}JSON/firstFile.json`;
 const secondJSONFile = `${basePath}JSON/secondFile.json`;
@@ -27,7 +28,7 @@ const secondYAMLFileR = `${basePath}YML/secondFileRecursive.yaml`;
 const firstINIFileR = `${basePath}INI/firstFileRecursive.ini`;
 const secondINIFileR = `${basePath}INI/secondFileRecursive.ini`;
 
-
+/*
 const expected = `
 {
     host: hexlet.io
@@ -82,7 +83,7 @@ Property 'group1.baz' was updated. From 'bas' to 'bars'
 Property 'group2' was removed
 Property 'group3' was added with complex value
 `;
-
+*/
 
 test('test, difference JSON files', () => {
   expect(gendiff(firstJSONFile, secondJSONFile)).toBe(expected);

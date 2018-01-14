@@ -25,48 +25,43 @@ const types = [
     type: 'nested',
     check: (first, second, key) => (first[key] instanceof Object && second[key] instanceof Object)
       && !(first[key] instanceof Array && second[key] instanceof Array),
-    getChildren: (first, second, fun) => fun(first, second),
-    getValue: () => null,
+    process: (first, second, fun) => ({ children: fun(first, second) }),
   },
   {
     type: 'original',
     check: (first, second, key) => (_.has(first, key) && _.has(second, key)
       && (first[key] === second[key])),
-    getChildren: () => null,
-    getValue: first => _.identity(first),
+    process: (first, second) => ({ first, second }),
   },
   {
     type: 'updated',
     check: (first, second, key) => (_.has(first, key) && _.has(second, key)
       && (first[key] !== second[key])),
-    getChildren: () => null,
-    getValue: (first, second) => ({ old: first, new: second }),
+    process: (first, second) => ({ first, second }),
   },
   {
     type: 'added',
     check: (first, second, key) => (!_.has(first, key) && _.has(second, key)),
-    getChildren: () => null,
-    getValue: (first, second) => _.identity(second),
+    process: (first, second) => ({ first, second }),
   },
   {
     type: 'removed',
     check: (first, second, key) => (_.has(first, key) && !_.has(second, key)),
-    getChildren: () => null,
-    getValue: first => _.identity(first),
+    process: (first, second) => ({ first, second }),
   },
 ];
 
 const getAst = (firstObj = {}, secondObj = {}) => {
   const uniqKeys = _.union(Object.keys(firstObj), Object.keys(secondObj));
   return uniqKeys.map((key) => {
-    const { type, getValue, getChildren } = _.find(types, item =>
+    const { type, process } = _.find(types, item =>
       item.check(firstObj, secondObj, key));
-    const value = getValue(firstObj[key], secondObj[key]);
-    const children = getChildren(firstObj[key], secondObj[key], getAst);
+    const { first, second, children } = process(firstObj[key], secondObj[key], getAst);
     return {
       name: key,
       type,
-      value,
+      valueBefore: first,
+      valueAfter: second,
       children,
     };
   });

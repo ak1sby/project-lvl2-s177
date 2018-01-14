@@ -1,6 +1,6 @@
 {
   "name": "gendiff-grishkevich",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Hexlet project",
   "main": "dist/index.js",
   "bin": {

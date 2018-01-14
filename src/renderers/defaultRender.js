@@ -8,23 +8,24 @@ const defaultRender = (data, curentIndent = setIndent) => {
   const indent = convertToSpaces(curentIndent - 2);
   const constIndent = convertToSpaces(setIndent);
 
-  const objectToString = (obj) => {
-    const result = Object.keys(obj)
-      .map(key =>
-        `${constIndent}${indent}${prefixSpace}${key}: ${_.isObject(obj[key]) ? objectToString(obj[key]) : obj[key]}`);
-    return (['{', ...result, `${convertToSpaces(curentIndent)}}`]).join('\n');
+  const valueToString = (value) => {
+    const objectToString = (obj) => {
+      const result = Object.keys(obj)
+        .map(key =>
+          `${constIndent}${indent}${prefixSpace}${key}: ${_.isObject(obj[key]) ? objectToString(obj[key]) : obj[key]}`);
+      return (['{', ...result, `${convertToSpaces(curentIndent)}}`]).join('\n');
+    };
+    return (_.isObject(value) ? `${objectToString(value)}` : `${value}`);
   };
 
-  const getValue = value => (_.isObject(value) ? `${objectToString(value)}` : `${value}`);
-
-  const genString = (name, value, prefix = '  ') => (`${indent}${prefix}${name}: ${getValue(value)}`);
+  const genString = (name, value, prefix = '  ') => (`${indent}${prefix}${name}: ${valueToString(value)}`);
 
   const selectFn = {
     nested: node => genString(node.name, defaultRender(node.children, curentIndent + setIndent)),
-    original: node => genString(node.name, node.value),
-    updated: node => [genString(node.name, node.value.new, '+ '), genString(node.name, node.value.old, '- ')].join('\n'),
-    added: node => genString(node.name, node.value, '+ '),
-    removed: node => genString(node.name, node.value, '- '),
+    original: node => genString(node.name, node.valueAfter),
+    updated: node => [genString(node.name, node.valueAfter, '+ '), genString(node.name, node.valueBefore, '- ')].join('\n'),
+    added: node => genString(node.name, node.valueAfter, '+ '),
+    removed: node => genString(node.name, node.valueBefore, '- '),
   };
 
   const resultArray = data.map(node => selectFn[node.type](node));
