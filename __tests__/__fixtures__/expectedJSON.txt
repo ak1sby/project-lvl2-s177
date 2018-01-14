@@ -1,0 +1,25 @@
+
+[
+      {
+        \"name\": \"host\",
+        \"type\": \"original\",
+        \"valueBefore\": \"hexlet.io\",
+        \"valueAfter\": \"hexlet.io\"
+      },
+      {
+        \"name\": \"timeout\",
+        \"type\": \"updated\",
+        \"valueBefore\": \"50\",
+        \"valueAfter\": \"20\"
+      },
+      {
+        \"name\": \"proxy\",
+        \"type\": \"removed\",
+        \"valueBefore\": \"123.234.53.22\"
+      },
+      {
+        \"name\": \"verbose\",
+        \"type\": \"added\",
+        \"valueAfter\": true
+      }
+    ]

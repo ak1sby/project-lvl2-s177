@@ -1,0 +1,86 @@
+[
+  {
+    "name": "common",
+    "type": "nested",
+    "children": [
+      {
+        "name": "setting1",
+        "type": "original",
+        "valueBefore": "Value 1",
+        "valueAfter": "Value 1"
+      },
+      {
+        "name": "setting2",
+        "type": "removed",
+        "valueBefore": "200"
+      },
+      {
+        "name": "setting3",
+        "type": "original",
+        "valueBefore": true,
+        "valueAfter": true
+      },
+      {
+        "name": "setting6",
+        "type": "nested",
+        "children": [
+          {
+            "name": "key",
+            "type": "original",
+            "valueBefore": "value",
+            "valueAfter": "value"
+          },
+          {
+            "name": "ops",
+            "type": "added",
+            "valueAfter": "vops"
+          }
+        ]
+      },
+      {
+        "name": "setting4",
+        "type": "added",
+        "valueAfter": "blah blah"
+      },
+      {
+        "name": "setting5",
+        "type": "added",
+        "valueAfter": {
+          "key5": "value5"
+        }
+      }
+    ]
+  },
+  {
+    "name": "group1",
+    "type": "nested",
+    "children": [
+      {
+        "name": "baz",
+        "type": "updated",
+        "valueBefore": "bas",
+        "valueAfter": "bars"
+      },
+      {
+        "name": "foo",
+        "type": "original",
+        "valueBefore": "bar",
+        "valueAfter": "bar"
+      }
+    ]
+  },
+  {
+    "name": "group2",
+    "type": "removed",
+    "valueBefore": {
+      "abc": "12345"
+    }
+  },
+  {
+    "name": "group3",
+    "type": "added",
+    "valueAfter": {
+      "fee": "100500"
+    }
+  }
+]
