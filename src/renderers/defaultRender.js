@@ -12,7 +12,8 @@ const defaultRender = (data, curentIndent = setIndent) => {
     const objectToString = (obj) => {
       const result = Object.keys(obj)
         .map(key =>
-          `{\n${constIndent}${indent}${prefixSpace}${key}: ${_.isObject(obj[key]) ? objectToString(obj[key]) : obj[key]}\n${indent}${prefixSpace}}`);
+          `{\n${constIndent}${indent}${prefixSpace}${key}: ${_.isObject(obj[key]) ?
+            objectToString(obj[key]) : obj[key]}\n${indent}${prefixSpace}}`);
       return result;
     };
     return (_.isObject(value) ? `${objectToString(value)}` : `${value}`);
